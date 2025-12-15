@@ -3,10 +3,10 @@
     "name": "Repak X - Nexus Mods Integration",
     "version": "1.0.0",
     "description": "Adds a 'To Repak X' button on Nexus Mods Marvel Rivals mod pages to quickly send mods to Repak X",
-    "author": "XzantGaming",
+    "author": "Saturn",
     "browser_specific_settings": {
         "gecko": {
-            "id": "repakx@xzantgaming.com",
+            "id": "repakx@saturn.com",
             "strict_min_version": "109.0"
         }
     },

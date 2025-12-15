@@ -1,110 +1,148 @@
-# Repak X - Nexus Mods Browser Extension
+<p align="center">
+  <img src="icons/icon128.png" alt="Repak X Logo" width="128" height="128">
+</p>
 
-A browser extension that adds a "To Repak X" button on Nexus Mods Marvel Rivals mod pages, allowing you to quickly download mods and send them directly to your Repak X application.
+<h1 align="center">Repak X Browser Extension</h1>
 
-## Features
+<p align="center">
+  <strong>One-click mod downloads from Nexus Mods to Repak X</strong>
+</p>
 
-- 🎮 **Marvel Rivals specific** - Only activates on Marvel Rivals mod pages
-- ⬇️ **One-click download** - Click "To Repak X" to download and automatically open in Repak X
-- 🔄 **Download monitoring** - Watches for completed downloads and redirects to Repak X
-- 🎨 **Clean UI** - Button blends with Nexus Mods design while being clearly visible
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/chrome-supported-green" alt="Chrome">
+  <img src="https://img.shields.io/badge/firefox-supported-orange" alt="Firefox">
+  <img src="https://img.shields.io/badge/edge-supported-blue" alt="Edge">
+</p>
 
-## Installation (Chrome/Edge)
+---
 
-### For Development/Testing
+## ✨ Features
 
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top right)
-3. Click **Load unpacked**
-4. Select this folder (`Repak-X-extension`)
-5. The extension should now appear in your extensions list
+| Feature                     | Description                                                          |
+| --------------------------- | -------------------------------------------------------------------- |
+| 🎮 **Marvel Rivals Support** | Automatically activates on Nexus Mods Marvel Rivals pages            |
+| ⚡ **One-Click Install**     | Click "To Repak X" to download and send directly to your mod manager |
+| 🔄 **Auto-Download**         | Automatically handles the "Slow Download" button for free users      |
+| 🌐 **Cross-Browser**         | Works on Chrome, Edge, and Firefox                                   |
+| 🎨 **Native UI**             | Button seamlessly integrates with Nexus Mods design                  |
 
-### Extension Icon
+---
 
-You'll need to add icon files to the `icons/` folder:
-- `icon16.png` (16x16 pixels)
-- `icon32.png` (32x32 pixels)
-- `icon48.png` (48x48 pixels)
-- `icon128.png` (128x128 pixels)
+## 📦 Installation
 
-You can use your Repak X app icon for these.
+### Chrome / Edge
 
-## Usage
+1. Download the latest `Repak-X-Chrome.crx` from [Releases](../../releases)
+2. Open `chrome://extensions/` (or `edge://extensions/`)
+3. Enable **Developer mode** (toggle in top right)
+4. Drag & drop the `.crx` file onto the page
 
-1. Navigate to any [Marvel Rivals mod page on Nexus Mods](https://www.nexusmods.com/marvelrivals)
-2. Go to the **Files** tab of the mod
-3. Look for the blue **To Repak X** button next to download buttons
-4. Click it!
-5. The extension will:
-   - Start watching for downloads
-   - Trigger the normal Nexus Mods download flow
-   - When the download completes, open Repak X with the file
+**Alternative (unpacked):**
+1. Download and extract `Repak-X-Chrome.zip`
+2. Click **Load unpacked** and select the extracted folder
 
-## Requirements
+### Firefox
 
-⚠️ **Important**: For the extension to fully work, Repak X needs to register a custom protocol handler (`repakx://`). This allows the extension to tell Repak X which file to install.
+1. Download the latest `Repak-X-Firefox.xpi` from [Releases](../../releases)
+2. Open `about:addons`
+3. Click the ⚙️ gear icon → **Install Add-on From File**
+4. Select the `.xpi` file
 
-## How It Works
+---
+
+## 🚀 Usage
+
+1. Navigate to any [Marvel Rivals mod on Nexus Mods](https://www.nexusmods.com/marvelrivals)
+2. Go to the **Files** tab
+3. Click the **"To Repak X"** button next to any download option
+4. The mod will automatically download and open in Repak X!
 
 ```
-[Click "To Repak X"]
-       ↓
-[Extension starts watching downloads]
-       ↓
-[Nexus Mods slow download page opens]
-       ↓
-[You complete the download manually]
-       ↓
-[Extension detects completed download]
-       ↓
-[Opens: repakx://install?file=C:/Users/.../Downloads/mod.zip]
-       ↓
-[Repak X receives the file and shows Install panel]
+[Click "To Repak X"] → [Auto-downloads mod] → [Opens in Repak X] → [Install!]
 ```
 
-## Development
+---
 
-### File Structure
+## ⚙️ Requirements
+
+- **Repak X** desktop application installed with `repakx://` protocol handler registered
+- Chrome 88+, Edge 88+, or Firefox 109+
+
+---
+
+## 🛠️ Building from Source
+
+### Prerequisites
+- PowerShell 5.1+
+- Chrome (for .crx generation)
+
+### Build Commands
+
+```powershell
+# Build both Chrome and Firefox packages
+.\build.ps1
+
+# Build Chrome only
+.\build.ps1 -Target chrome
+
+# Build Firefox only
+.\build.ps1 -Target firefox
+```
+
+### Output Files
+
+After building, you'll find in the `dist/` folder:
+
+| File                  | Description                       |
+| --------------------- | --------------------------------- |
+| `Repak-X-Chrome.crx`  | Chrome/Edge installable extension |
+| `Repak-X-Chrome.zip`  | For Chrome Web Store submission   |
+| `Repak-X-Firefox.xpi` | Firefox installable extension     |
+| `Repak-X.pem`         | Private signing key (keep safe!)  |
+
+---
+
+## 📁 Project Structure
 
 ```
 Repak-X-extension/
-├── manifest.json          # Extension manifest (Chrome MV3)
 ├── background/
-│   └── background.js      # Service worker - download monitoring
+│   └── background.js       # Service worker - download monitoring
 ├── content/
-│   ├── content.js         # Injects buttons on Nexus pages
-│   └── content.css        # Button styling
+│   ├── content.js          # Injects "To Repak X" buttons
+│   ├── content.css         # Button styling
+│   └── alt-button.css      # Alternative button styles
 ├── popup/
-│   ├── popup.html         # Extension popup UI
-│   ├── popup.css          # Popup styling
-│   └── popup.js           # Popup logic
-└── icons/
-    └── (icon files)       # Extension icons
+│   ├── popup.html          # Extension popup UI
+│   ├── popup.css           # Popup styling
+│   └── popup.js            # Popup logic
+├── icons/                  # Extension icons (16, 32, 48, 128px)
+├── manifest.json           # Firefox manifest
+├── manifest.chrome.json    # Chrome/Edge manifest
+├── manifest.firefox.json   # Firefox manifest (source)
+├── build.ps1               # Build script
+└── browser-polyfill.js     # Cross-browser API compatibility
 ```
 
-### Building for Production
+---
 
-For Chrome Web Store:
-```bash
-# Zip the extension folder (excluding .git, etc.)
-zip -r repak-x-extension.zip . -x "*.git*"
-```
+## 🔒 Privacy
 
-## Firefox Support
+This extension:
+- ✅ Only activates on `nexusmods.com/marvelrivals/*`
+- ✅ Does not collect any personal data
+- ✅ Does not make external network requests (except to Nexus Mods)
+- ✅ All processing happens locally in your browser
 
-To support Firefox, you'll need to:
-1. Copy `manifest.json` to `manifest-firefox.json`
-2. Add Firefox-specific configuration:
-   ```json
-   "browser_specific_settings": {
-     "gecko": {
-       "id": "repak-x@xzantgaming.com",
-       "strict_min_version": "109.0"
-     }
-   }
-   ```
-3. Change `background.service_worker` to `background.scripts`
+---
 
-## License
+## 📄 License
 
-MIT - Same as Repak X
+MIT License - See [LICENSE](LICENSE) for details.
+
+---
+
+<p align="center">
+  Made with ❤️ for the Marvel Rivals modding community
+</p>
