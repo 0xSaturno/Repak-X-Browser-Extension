@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repak X</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <img src="../icons/icon48.png" alt="Repak X" class="logo">
+      <div class="header-text">
+        <h1>Repak X</h1>
+        <span class="subtitle">Nexus Mods Integration</span>
+      </div>
+    </header>
+
+    <main class="popup-content">
+      <section class="status-section">
+        <div class="status-indicator" id="statusIndicator">
+          <span class="status-dot"></span>
+          <span class="status-text" id="statusText">Ready</span>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <h2>How to use</h2>
+        <ol class="instructions">
+          <li>Navigate to a <strong>Marvel Rivals</strong> mod page on Nexus Mods</li>
+          <li>Look for the <span class="button-preview">To Repak X</span> button next to download buttons</li>
+          <li>Click it to download and automatically send to Repak X</li>
+        </ol>
+      </section>
+
+      <section class="watch-section" id="watchSection" style="display: none;">
+        <div class="watch-info">
+          <span class="watch-icon">⏳</span>
+          <span id="watchFileName">Waiting for download...</span>
+        </div>
+        <button id="cancelWatch" class="btn-cancel">Cancel</button>
+      </section>
+
+      <section class="links-section">
+        <a href="https://www.nexusmods.com/marvelrivals" target="_blank" class="link-btn">
+          <svg viewBox="0 0 24 24" width="16" height="16">
+            <path fill="currentColor" d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+          Marvel Rivals on Nexus
+        </a>
+      </section>
+    </main>
+
+    <footer class="popup-footer">
+      <span class="version" id="version">v1.0.0</span>
+      <span class="credits">by XzantGaming</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
