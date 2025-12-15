@@ -1,0 +1,96 @@
+/*
+ * Alternative Repak X button style (testing)
+ * This CSS removes the text label and any download icon, leaving only the RepakX SVG icon.
+ * To use, add the class `alt` to the button, e.g.
+ *   <button class="repakx-button alt" ...></button>
+ */
+
+.repakx-button.alt {
+    /* Keep the same background gradient */
+    background: linear-gradient(135deg, #333333 0%, #555555 100%);
+    color: white;
+    /* Make it a square button – only the icon */
+    padding: 8px;
+    /* smaller padding for square shape */
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 32px;
+    overflow: hidden;
+    /* clip enlarged icon */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(74, 158, 255, 0.3);
+}
+
+/* Hide any span text inside the button */
+.repakx-button.alt span {
+    display: none;
+}
+
+/* Ensure the icon stays centered and inherits the button color */
+.repakx-button.alt .repakx-icon {
+    margin: -16px;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    display: block;
+}
+
+/* Hover and active states keep the same gradient effect */
+.repakx-button.alt:hover:not(:disabled) {
+    background: #333333;
+    /* solid dark background on hover */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(74, 158, 255, 0.4);
+}
+
+.repakx-button.alt:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(74, 158, 255, 0.3);
+}
+
+.repakx-button.alt.loading {
+    background: linear-gradient(135deg, #ffa500 0%, #ff6b6b 100%);
+}
+
+.repakx-button.alt.waiting {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+}
+
+.repakx-button.alt.success {
+    background: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+}
+
+.repakx-button.alt.error {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+}
+
+/* Shine border effect for the alternative Repak X button */
+.repakx-button.alt {
+    position: relative;
+    overflow: hidden;
+}
+
+.repakx-button.alt::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, rgba(200, 0, 0, 0.2), rgba(200, 0, 0, 0) 70%);
+    animation: shineBorder 2s infinite linear;
+    pointer-events: none;
+}
+
+@keyframes shineBorder {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}

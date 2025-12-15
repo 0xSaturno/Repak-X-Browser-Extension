@@ -1,0 +1,107 @@
+/**
+ * Repak X Button Styles
+ * Designed to blend with Nexus Mods while standing out enough to be noticeable
+ */
+
+.repakx-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  /* For flex parent containers (top Download bar) */
+  gap: 6px;
+  padding: 8px 8px;
+  margin: -1px 0px 0px 8px;
+  /* Repak X brand colors - similar to your app */
+  background: linear-gradient(135deg, #4a9eff 0%, #6c5ce7 100%);
+  color: white;
+
+  border: none;
+  border-radius: 4px;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  box-shadow: 0 2px 4px rgba(74, 158, 255, 0.3);
+}
+
+.repakx-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5ea8ff 0%, #7d6ef0 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 158, 255, 0.4);
+}
+
+.repakx-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(74, 158, 255, 0.3);
+}
+
+.repakx-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.repakx-button.loading {
+  background: linear-gradient(135deg, #ffa500 0%, #ff6b6b 100%);
+}
+
+.repakx-button.waiting {
+  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+}
+
+.repakx-button.success {
+  background: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+}
+
+.repakx-button.error {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+}
+
+.repakx-icon {
+  flex-shrink: 0;
+}
+
+.repakx-icon.spin {
+  animation: repakx-spin 1s linear infinite;
+}
+
+@keyframes repakx-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark mode adjustments for Nexus Mods */
+@media (prefers-color-scheme: dark) {
+  .repakx-button {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .repakx-button:hover:not(:disabled) {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Nexus Mods specific overrides */
+.nexusmods .repakx-button,
+[class*="nexus"] .repakx-button {
+  vertical-align: top;
+}
+
+/* Ensure button fits in various download layouts */
+.file-expander-header .repakx-button,
+.accordion-header .repakx-button {
+  margin-top: 4px;
+}
+
+.btn-group .repakx-button {
+  margin-left: 4px;
+}

@@ -1,0 +1,13 @@
+# Build outputs
+dist/
+
+# Private signing key - NEVER commit this!
+*.pem
+
+# IDE files
+.vscode/
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
