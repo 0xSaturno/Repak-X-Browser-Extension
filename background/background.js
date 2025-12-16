@@ -93,15 +93,15 @@ async function handleDownloadComplete(downloadItem) {
 
         const tab = await browserAPI.tabs.create({
             url: redirectUrl,
-            active: false
+            active: true
         });
 
-        // Close the redirect tab after a delay
+        // Close the redirect tab after a delay (10 seconds to allow user to accept prompt)
         setTimeout(async () => {
             try {
                 await browserAPI.tabs.remove(tab.id);
             } catch (e) { /* Tab might already be closed */ }
-        }, 2000);
+        }, 10000);
 
         // Notify content script of success
         await notifyContentScript(tabId, 'downloadComplete', { fileName, filePath });

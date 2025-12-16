@@ -1,12 +1,445 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Redirecting to Repak X...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repak X - Opening...</title>
+    <link href="https://fonts.googleapis.com/css2?family=BBH+Bartle&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f0a0a 0%, #1a0f0f 50%, #1f1212 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(220, 38, 38, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s;
+            animation-duration: 12s;
+        }
+
+        .particle:nth-child(2) {
+            left: 20%;
+            animation-delay: 2s;
+            animation-duration: 14s;
+        }
+
+        .particle:nth-child(3) {
+            left: 30%;
+            animation-delay: 4s;
+            animation-duration: 11s;
+        }
+
+        .particle:nth-child(4) {
+            left: 40%;
+            animation-delay: 1s;
+            animation-duration: 16s;
+        }
+
+        .particle:nth-child(5) {
+            left: 50%;
+            animation-delay: 3s;
+            animation-duration: 13s;
+        }
+
+        .particle:nth-child(6) {
+            left: 60%;
+            animation-delay: 5s;
+            animation-duration: 15s;
+        }
+
+        .particle:nth-child(7) {
+            left: 70%;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+
+        .particle:nth-child(8) {
+            left: 80%;
+            animation-delay: 4s;
+            animation-duration: 14s;
+        }
+
+        .particle:nth-child(9) {
+            left: 90%;
+            animation-delay: 1s;
+            animation-duration: 17s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 3rem;
+            max-width: 480px;
+        }
+
+        /* Logo with glow effect */
+        .logo-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(220, 38, 38, 0.3);
+            animation: logoGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% {
+                filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.4));
+            }
+
+            100% {
+                filter: drop-shadow(0 0 40px rgba(185, 28, 28, 0.6));
+            }
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .logo-x {
+            font-family: 'BBH Bartle', sans-serif;
+            font-weight: 400;
+            font-size: 4.5rem;
+            margin-left: -0.1em;
+        }
+
+        /* Icon container */
+        .icon-container {
+            margin: 2.5rem 0;
+            position: relative;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            position: relative;
+            z-index: 2;
+            animation: iconPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.5));
+        }
+
+        @keyframes iconPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.5));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 40px rgba(185, 28, 28, 0.8));
+            }
+        }
+
+        /* Pulsing ring */
+        .pulse-ring {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            border-radius: 50%;
+            animation: pulse 2s ease-out infinite;
+        }
+
+        .pulse-ring:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        /* Status text */
+        .status {
+            margin-bottom: 1.5rem;
+        }
+
+        .status-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-detail {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #dc2626, #b91c1c, #991b1b);
+            border-radius: 2px;
+            animation: progress 10s linear forwards;
+            width: 0%;
+        }
+
+        @keyframes progress {
+            0% {
+                width: 0%;
+            }
+
+            100% {
+                width: 100%;
+            }
+        }
+
+        /* Card styling */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.3),
+                0 0 80px rgba(220, 38, 38, 0.1);
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Hint text */
+        .hint {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .hint-icon {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hint-text {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        /* Error state */
+        .error .status-text {
+            color: #f87171;
+        }
+
+        .error .app-icon {
+            filter: drop-shadow(0 0 20px rgba(248, 113, 113, 0.6));
+            animation: none;
+        }
+
+        /* Success state */
+        .success .icon-container {
+            display: none;
+        }
+
+        .success .status-text {
+            color: #4ade80;
+        }
+
+        .checkmark {
+            display: none;
+            width: 60px;
+            height: 60px;
+            margin: 2.5rem auto;
+        }
+
+        .success .checkmark {
+            display: block;
+        }
+
+        .checkmark-circle {
+            stroke: #4ade80;
+            stroke-width: 2;
+            fill: none;
+            animation: checkCircle 0.6s ease-out forwards;
+        }
+
+        .checkmark-check {
+            stroke: #4ade80;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 50;
+            stroke-dashoffset: 50;
+            animation: checkDraw 0.4s 0.4s ease-out forwards;
+        }
+
+        @keyframes checkCircle {
+            0% {
+                stroke-dasharray: 0, 200;
+            }
+
+            100% {
+                stroke-dasharray: 200, 0;
+            }
+        }
+
+        @keyframes checkDraw {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <p>Opening Repak X...</p>
+    <!-- Background particles -->
+    <div class="bg-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <div class="card" id="statusCard">
+            <div class="logo-container">
+                <div class="logo">Repak <span class="logo-x">X</span></div>
+                <div class="subtitle">Mod Installer</div>
+            </div>
+
+            <div class="icon-container">
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring"></div>
+                <img src="icons/icon128.png" alt="Repak X" class="app-icon">
+            </div>
+
+            <!-- Success checkmark (hidden by default) -->
+            <svg class="checkmark" viewBox="0 0 60 60">
+                <circle class="checkmark-circle" cx="30" cy="30" r="28" stroke-dasharray="200" />
+                <path class="checkmark-check" d="M18 30 L26 38 L42 22" />
+            </svg>
+
+            <div class="status">
+                <div class="status-text" id="statusText">Opening Repak X...</div>
+                <div class="status-detail" id="statusDetail">
+                    Please click "Open Repak X" when prompted by your browser
+                </div>
+            </div>
+
+            <div class="hint">
+                <div class="hint-icon">💡</div>
+                <div class="hint-text">
+                    If you don't see a prompt, check if your browser blocked it.
+                    This tab will close automatically after the app opens.
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
     <script src="redirect.js"></script>
 </body>
 
