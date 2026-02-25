@@ -55,7 +55,7 @@
 
 1. Navigate to any [Marvel Rivals mod on Nexus Mods](https://www.nexusmods.com/marvelrivals)
 2. Go to the **Files** tab
-3. Click the **"To Repak X"** button next to any download option
+3. Click the **Repak X logo** button that appears next to any download option
 4. The mod will automatically download and open in Repak X!
 
 ```
