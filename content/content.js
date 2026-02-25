@@ -12,7 +12,15 @@
     const BUTTON_CLASS = 'repakx-button';
     const PROCESSED_ATTR = 'data-repakx-processed';
     const ICON_URL = browserAPI.runtime.getURL('icons/icon128.png');
-    const DEFAULT_ICON_HTML = `<img src="${browserAPI.runtime.getURL('icons/icon128.png')}" class="repakx-icon" width="32" height="32" />`;
+    function createIconImg(extraClass = '') {
+        const img = document.createElement('img');
+        img.src = ICON_URL;
+        img.className = 'repakx-icon' + (extraClass ? ' ' + extraClass : '');
+        img.width = 32;
+        img.height = 32;
+        console.log('[Repak X] Created icon element with class:', img.className);
+        return img;
+    }
 
     console.log('[Repak X] Content script loaded on:', window.location.href);
 
@@ -115,7 +123,8 @@
         button.className = BUTTON_CLASS;
         button.classList.add('alt');
         button.setAttribute('type', 'button');
-        button.innerHTML = DEFAULT_ICON_HTML;
+        button.textContent = '';
+        button.appendChild(createIconImg());
 
         button._downloadButton = downloadButton;
         button._fileName = fileName;
@@ -129,7 +138,8 @@
             // Show loading state
             button.classList.add('loading');
             button.disabled = true;
-            button.innerHTML = `<img src="${ICON_URL}" class="repakx-icon spin" width="32" height="32" />`;
+            button.textContent = '';
+            button.appendChild(createIconImg('spin'));
 
             try {
                 // Read all file sizes from the page, use the largest for dynamic timeout
@@ -181,7 +191,8 @@
                 console.error('[Repak X] Error:', error);
                 button.classList.remove('loading');
                 button.disabled = false;
-                button.innerHTML = DEFAULT_ICON_HTML;
+                button.textContent = '';
+                button.appendChild(createIconImg());
             }
         });
 
@@ -275,7 +286,8 @@
             activeButtons.forEach(button => {
                 button.classList.remove('loading', 'waiting');
                 button.disabled = false;
-                button.innerHTML = DEFAULT_ICON_HTML;
+                button.textContent = '';
+                button.appendChild(createIconImg());
             });
             sendResponse({ received: true });
         }
@@ -285,7 +297,8 @@
             activeButtons.forEach(button => {
                 button.classList.remove('loading', 'waiting');
                 button.disabled = false;
-                button.innerHTML = DEFAULT_ICON_HTML;
+                button.textContent = '';
+                button.appendChild(createIconImg());
             });
             sendResponse({ received: true });
         }

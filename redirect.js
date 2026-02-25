@@ -11,10 +11,17 @@ if (filePath) {
     const fileName = filePath.split(/[/\\]/).pop();
 
     // Update status with filename
-    statusDetail.innerHTML = `
-        Installing: <strong style="color: #dc2626;">${fileName}</strong><br>
-        Please click "Open Repak X" when prompted by your browser
-    `;
+    statusDetail.textContent = '';
+    const installText = document.createTextNode('Installing: ');
+    const fileNameStrong = document.createElement('strong');
+    fileNameStrong.style.color = '#dc2626';
+    fileNameStrong.textContent = fileName;
+    const promptText = document.createTextNode('Please click "Open Repak X" when prompted by your browser');
+    statusDetail.appendChild(installText);
+    statusDetail.appendChild(fileNameStrong);
+    statusDetail.appendChild(document.createElement('br'));
+    statusDetail.appendChild(promptText);
+    console.log('[Repak X Redirect] Updated status for file:', fileName);
 
     // Open the Repak X protocol
     window.location.href = 'repakx://install?file=' + encodeURIComponent(filePath);
@@ -26,10 +33,17 @@ if (filePath) {
 
     setTimeout(() => {
         statusText.textContent = 'Still waiting...';
-        statusDetail.innerHTML = `
-            If you don't see a prompt, the app may have already opened!<br>
-            Check your taskbar for <strong style="color: #dc2626;">Repak X</strong>
-        `;
+        statusDetail.textContent = '';
+        const waitText1 = document.createTextNode("If you don't see a prompt, the app may have already opened!");
+        const waitText2 = document.createTextNode('Check your taskbar for ');
+        const repakStrong = document.createElement('strong');
+        repakStrong.style.color = '#dc2626';
+        repakStrong.textContent = 'Repak X';
+        statusDetail.appendChild(waitText1);
+        statusDetail.appendChild(document.createElement('br'));
+        statusDetail.appendChild(waitText2);
+        statusDetail.appendChild(repakStrong);
+        console.log('[Repak X Redirect] Updated to waiting state');
     }, 3500);
 
     // Close this tab after a delay (5 seconds to allow user to accept prompt)
