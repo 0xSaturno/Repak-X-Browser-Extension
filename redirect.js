@@ -25,22 +25,14 @@ if (filePath) {
     }, 2000);
 
     setTimeout(() => {
-        statusText.textContent = 'Almost there...';
-        statusDetail.innerHTML = `
-            Installing: <strong style="color: #dc2626;">${fileName}</strong><br>
-            Click "Open Repak X" in your browser's prompt
-        `;
-    }, 5000);
-
-    setTimeout(() => {
         statusText.textContent = 'Still waiting...';
         statusDetail.innerHTML = `
             If you don't see a prompt, the app may have already opened!<br>
             Check your taskbar for <strong style="color: #dc2626;">Repak X</strong>
         `;
-    }, 8000);
+    }, 3500);
 
-    // Close this tab after a delay (10 seconds to allow user to accept prompt)
+    // Close this tab after a delay (5 seconds to allow user to accept prompt)
     setTimeout(() => {
         // Show success state before closing
         statusCard.classList.add('success');
@@ -50,7 +42,7 @@ if (filePath) {
         setTimeout(() => {
             window.close();
         }, 1000);
-    }, 10000);
+    }, 5000);
 } else {
     // Error state
     statusCard.classList.add('error');

@@ -135,6 +135,14 @@ This extension:
 - ✅ Does not make external network requests (except to Nexus Mods)
 - ✅ All processing happens locally in your browser
 
+For full details, see our [Privacy Policy](PRIVACY.md).
+
+---
+
+## ⚠️ Disclaimer
+
+This project is **not affiliated with, endorsed by, or associated with Marvel, NetEase, or any of their subsidiaries**. All Marvel Rivals assets, trademarks, and intellectual property belong to their respective owners. This project is a **community-made tool** and is **not used for any type of profit**. It is provided free of charge for personal, non-commercial use only.
+
 ---
 
 ## 📄 License

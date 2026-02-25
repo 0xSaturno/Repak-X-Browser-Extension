@@ -6,7 +6,7 @@
     "author": "Saturn",
     "browser_specific_settings": {
         "gecko": {
-            "id": "repakx@saturn.com",
+            "id": "repakx@extension",
             "strict_min_version": "109.0"
         }
     },
@@ -59,6 +59,7 @@
         {
             "resources": [
                 "icons/*",
+                "fonts/*",
                 "redirect.html"
             ],
             "matches": [

@@ -7,15 +7,30 @@
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
 const REPAK_PROTOCOL = 'repakx://';
-const WATCH_TIMEOUT_MS = 120000; // 2 minutes - Nexus slow download can take a while
+const DEFAULT_TIMEOUT_MS = 120000; // 2 minutes fallback
+const SLOW_DOWNLOAD_SPEED_MBps = 1.5; // Nexus free user speed cap
 
 // State for tracking active download watches
 let activeWatch = null;
 
 /**
+ * Calculate timeout based on file size (for free/slow download users)
+ */
+function calculateTimeout(fileSizeMB) {
+    if (!fileSizeMB || fileSizeMB <= 0) return DEFAULT_TIMEOUT_MS;
+
+    // Time = size / speed, plus 30s buffer for page loading and overhead
+    const downloadTimeSec = fileSizeMB / SLOW_DOWNLOAD_SPEED_MBps;
+    const timeoutMs = Math.max(DEFAULT_TIMEOUT_MS, (downloadTimeSec + 30) * 1000);
+
+    console.log(`Repak X: Dynamic timeout: ${fileSizeMB.toFixed(1)} MB @ ${SLOW_DOWNLOAD_SPEED_MBps} MB/s = ${Math.round(timeoutMs / 1000)}s`);
+    return timeoutMs;
+}
+
+/**
  * Start watching for a download from Nexus Mods
  */
-function startDownloadWatch(expectedFileName, modPageUrl, tabId) {
+function startDownloadWatch(expectedFileName, modPageUrl, tabId, fileSizeMB) {
     console.log('Repak X: Starting download watch for:', expectedFileName);
 
     // Clear any existing watch
@@ -23,16 +38,19 @@ function startDownloadWatch(expectedFileName, modPageUrl, tabId) {
         clearTimeout(activeWatch.timeout);
     }
 
+    const timeoutMs = calculateTimeout(fileSizeMB);
+
     activeWatch = {
         expectedFileName,
         modPageUrl,
         tabId,
         startTime: Date.now(),
+        timeoutMs,
         timeout: setTimeout(() => {
             console.log('Repak X: Download watch timed out');
             notifyContentScript(tabId, 'downloadFailed', { reason: 'timeout' });
             activeWatch = null;
-        }, WATCH_TIMEOUT_MS)
+        }, timeoutMs)
     };
 
     return { success: true };
@@ -134,7 +152,8 @@ browserAPI.runtime.onMessage.addListener((message, sender, sendResponse) => {
         const result = startDownloadWatch(
             message.expectedFileName,
             message.modPageUrl,
-            sender.tab?.id
+            sender.tab?.id,
+            message.fileSizeMB
         );
         sendResponse(result);
         return true;

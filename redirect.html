@@ -5,8 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Repak X - Opening...</title>
-    <link href="https://fonts.googleapis.com/css2?family=BBH+Bartle&display=swap" rel="stylesheet">
     <style>
+        /* Local font - no external requests */
+        @font-face {
+            font-family: 'BBH Bartle';
+            src: url('fonts/BBHBartle-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -134,12 +142,10 @@
         }
 
         .logo {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #991b1b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'BBH Bartle', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #ffffff;
             text-shadow: 0 0 40px rgba(220, 38, 38, 0.3);
             animation: logoGlow 2s ease-in-out infinite alternate;
         }
@@ -160,13 +166,6 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-top: 0.5rem;
-        }
-
-        .logo-x {
-            font-family: 'BBH Bartle', sans-serif;
-            font-weight: 400;
-            font-size: 4.5rem;
-            margin-left: -0.1em;
         }
 
         /* Icon container */
@@ -261,7 +260,7 @@
             height: 100%;
             background: linear-gradient(90deg, #dc2626, #b91c1c, #991b1b);
             border-radius: 2px;
-            animation: progress 10s linear forwards;
+            animation: progress 5s linear forwards;
             width: 0%;
         }
 
@@ -403,7 +402,7 @@
     <div class="container">
         <div class="card" id="statusCard">
             <div class="logo-container">
-                <div class="logo">Repak <span class="logo-x">X</span></div>
+                <div class="logo">Repak X</div>
                 <div class="subtitle">Mod Installer</div>
             </div>
 

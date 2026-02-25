@@ -11,8 +11,16 @@
 
     const BUTTON_CLASS = 'repakx-button';
     const PROCESSED_ATTR = 'data-repakx-processed';
+    const ICON_URL = browserAPI.runtime.getURL('icons/icon128.png');
+    const DEFAULT_ICON_HTML = `<img src="${browserAPI.runtime.getURL('icons/icon128.png')}" class="repakx-icon" width="32" height="32" />`;
 
     console.log('[Repak X] Content script loaded on:', window.location.href);
+
+    // Skip edit/admin pages
+    if (window.location.pathname.includes('/edit/') || window.location.pathname.includes('/edit?')) {
+        console.log('[Repak X] Skipping edit page');
+        return;
+    }
 
     /**
      * Recursively find all buttons including inside Shadow DOMs
@@ -47,41 +55,41 @@
                     console.log('[Repak X] Looking for Slow download button... attempt', attempts);
                 }
 
-                // Look for any button containing "slow download" text
-                // Including inside Shadow DOMs
+                const pageText = document.body?.textContent?.toLowerCase() || '';
+
+                // Premium auto-download — already started, nothing to click
+                if (pageText.includes('download should automatically begin') || pageText.includes('being prepared for download')) {
+                    console.log('[Repak X] ✓ Premium auto-download detected, skipping');
+                    resolve(true);
+                    return;
+                }
+
+                // Premium manual-start — click the #dl_button if present
+                const dlButton = document.querySelector('a#dl_button, button#dl_button');
+                if (dlButton) {
+                    console.log('[Repak X] ✓ Found premium Download button');
+                    setTimeout(() => {
+                        dlButton.click();
+                        console.log('[Repak X] ✓ Clicked!');
+                    }, 500);
+                    resolve(true);
+                    return;
+                }
+
+                // Free user flow — look for "Slow download" button
                 const allButtons = getAllButtons();
 
                 for (const btn of allButtons) {
                     const text = btn.textContent?.toLowerCase().trim() || '';
 
                     if (text.includes('slow download') || (text.includes('slow') && text.includes('download'))) {
-                        console.log('[Repak X] ✓ Found Slow download button!');
-                        console.log('[Repak X] Button classes:', btn.className);
-                        console.log('[Repak X] Button text:', btn.textContent?.trim());
-
-                        // Delay before clicking
+                        console.log('[Repak X] ✓ Found Slow download button');
                         setTimeout(() => {
                             btn.click();
                             console.log('[Repak X] ✓ Clicked!');
                         }, 500);
-
                         resolve(true);
                         return;
-                    }
-                }
-
-                // Also try looking for spans with "slow download"
-                const spans = document.querySelectorAll('span');
-                for (const span of spans) {
-                    const text = span.textContent?.toLowerCase().trim() || '';
-                    if (text === 'slow download') {
-                        const parentBtn = span.closest('button');
-                        if (parentBtn) {
-                            console.log('[Repak X] ✓ Found via span!');
-                            setTimeout(() => parentBtn.click(), 500);
-                            resolve(true);
-                            return;
-                        }
                     }
                 }
 
@@ -89,12 +97,6 @@
                     setTimeout(checkForButton, 100);
                 } else {
                     console.log('[Repak X] ✗ Button not found after 10 seconds');
-                    console.log('[Repak X] Total buttons found:', allButtons.length);
-                    // Log all buttons for debugging
-                    allButtons.forEach((btn, i) => {
-                        const text = btn.textContent?.trim().substring(0, 40);
-                        if (text) console.log(`  [${i}] "${text}"`);
-                    });
                     resolve(false);
                 }
             };
@@ -113,9 +115,7 @@
         button.className = BUTTON_CLASS;
         button.classList.add('alt');
         button.setAttribute('type', 'button');
-        button.innerHTML = `
-            <img src="${browserAPI.runtime.getURL('icons/icon128.png')}" class="repakx-icon" width="32" height="32" />
-        `;
+        button.innerHTML = DEFAULT_ICON_HTML;
 
         button._downloadButton = downloadButton;
         button._fileName = fileName;
@@ -129,19 +129,41 @@
             // Show loading state
             button.classList.add('loading');
             button.disabled = true;
-            button.innerHTML = `
-                <svg class="repakx-icon spin" viewBox="0 0 24 24" width="16" height="16">
-                    <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                </svg>
-                <span>Starting...</span>
-            `;
+            button.innerHTML = `<img src="${ICON_URL}" class="repakx-icon spin" width="32" height="32" />`;
 
             try {
+                // Read all file sizes from the page, use the largest for dynamic timeout
+                let fileSizeMB = null;
+                const statItems = document.querySelectorAll('.statitem, .stat-item');
+                for (const item of statItems) {
+                    const title = item.querySelector('.titlestat, .stat-title');
+                    if (title && title.textContent.toLowerCase().includes('file size')) {
+                        const stat = item.querySelector('.stat');
+                        if (stat) {
+                            const sizeText = stat.textContent.trim();
+                            const match = sizeText.match(/([\d.]+)\s*(GB|MB|KB)/i);
+                            if (match) {
+                                const value = parseFloat(match[1]);
+                                const unit = match[2].toUpperCase();
+                                let sizeMB = 0;
+                                if (unit === 'GB') sizeMB = value * 1024;
+                                else if (unit === 'MB') sizeMB = value;
+                                else if (unit === 'KB') sizeMB = value / 1024;
+                                if (!fileSizeMB || sizeMB > fileSizeMB) fileSizeMB = sizeMB;
+                            }
+                        }
+                    }
+                }
+                if (fileSizeMB) {
+                    console.log('[Repak X] Largest file size on page:', `${fileSizeMB.toFixed(1)} MB`);
+                }
+
                 // Notify background to watch for downloads
                 const response = await browserAPI.runtime.sendMessage({
                     action: 'startDownloadWatch',
                     expectedFileName: fileName,
-                    modPageUrl: window.location.href
+                    modPageUrl: window.location.href,
+                    fileSizeMB: fileSizeMB
                 });
 
                 if (response?.success) {
@@ -152,35 +174,14 @@
                         downloadButton.click();
                     }
 
-                    button.innerHTML = `
-                        <svg class="repakx-icon spin" viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        <span>Waiting for popup...</span>
-                    `;
-
                     // Wait for "Slow download" button to appear and auto-click it
                     await waitForSlowDownloadAndClick();
-
-                    button.innerHTML = `
-                        <svg class="repakx-icon spin" viewBox="0 0 24 24" width="16" height="16">
-                            <path fill="currentColor" d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
-                        </svg>
-                        <span>Downloading...</span>
-                    `;
-                    button.classList.remove('loading');
-                    button.classList.add('waiting');
                 }
             } catch (error) {
                 console.error('[Repak X] Error:', error);
                 button.classList.remove('loading');
                 button.disabled = false;
-                button.innerHTML = `
-                    <svg class="repakx-icon" viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                    </svg>
-                    <span>To Repak X</span>
-                `;
+                button.innerHTML = DEFAULT_ICON_HTML;
             }
         });
 
@@ -270,32 +271,21 @@
         console.log('[Repak X] Received message:', message);
 
         if (message.action === 'downloadComplete') {
-            const waitingButtons = document.querySelectorAll(`.${BUTTON_CLASS}.waiting`);
-            waitingButtons.forEach(button => {
-                button.classList.remove('waiting');
-                button.classList.add('success');
-                button.innerHTML = `
-                    <svg class="repakx-icon" viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                    <span>Sent to Repak X!</span>
-                `;
+            const activeButtons = document.querySelectorAll(`.${BUTTON_CLASS}.loading, .${BUTTON_CLASS}.waiting`);
+            activeButtons.forEach(button => {
+                button.classList.remove('loading', 'waiting');
                 button.disabled = false;
+                button.innerHTML = DEFAULT_ICON_HTML;
             });
             sendResponse({ received: true });
         }
 
-        if (message.action === 'downloadFailed') {
-            const waitingButtons = document.querySelectorAll(`.${BUTTON_CLASS}.waiting`);
-            waitingButtons.forEach(button => {
-                button.classList.remove('waiting');
+        if (message.action === 'resetButtons' || message.action === 'downloadFailed') {
+            const activeButtons = document.querySelectorAll(`.${BUTTON_CLASS}.loading, .${BUTTON_CLASS}.waiting`);
+            activeButtons.forEach(button => {
+                button.classList.remove('loading', 'waiting');
                 button.disabled = false;
-                button.innerHTML = `
-                    <svg class="repakx-icon" viewBox="0 0 24 24" width="16" height="16">
-                        <path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-                    </svg>
-                    <span>To Repak X</span>
-                `;
+                button.innerHTML = DEFAULT_ICON_HTML;
             });
             sendResponse({ received: true });
         }
@@ -317,7 +307,28 @@
         // Wait for the page to fully render (React apps can be slow)
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // Look for the Slow download button
+        const pageText = document.body?.textContent?.toLowerCase() || '';
+
+        // Premium auto-download page — download already started, do nothing
+        if (pageText.includes('download should automatically begin') || pageText.includes('being prepared for download')) {
+            console.log('[Repak X] Premium auto-download detected, skipping button click');
+            return true;
+        }
+
+        // Premium manual-start page — need to click the Download button once
+        if (pageText.includes('file will be served via')) {
+            console.log('[Repak X] Premium manual download page detected');
+            const dlButton = document.querySelector('a#dl_button, button#dl_button');
+            if (dlButton) {
+                setTimeout(() => {
+                    dlButton.click();
+                    console.log('[Repak X] ✓ Clicked premium Download button');
+                }, 500);
+            }
+            return true;
+        }
+
+        // Free user flow: look for the Slow download button
         const found = await waitForSlowDownloadAndClick();
 
         if (found) {

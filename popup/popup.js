@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Cancel button handler
     document.getElementById('cancelWatch').addEventListener('click', async () => {
         await browserAPI.runtime.sendMessage({ action: 'cancelWatch' });
+        // Reset loading buttons on the active tab
+        const [tab] = await browserAPI.tabs.query({ active: true, currentWindow: true });
+        if (tab?.id) {
+            try {
+                await browserAPI.tabs.sendMessage(tab.id, { action: 'resetButtons' });
+            } catch (e) { /* Tab may not have content script */ }
+        }
         await updateWatchStatus();
     });
 

@@ -80,7 +80,9 @@
     content: '';
     position: absolute;
     inset: -2px;
-    background: linear-gradient(135deg, rgba(200, 0, 0, 0.2), rgba(200, 0, 0, 0) 70%);
+    background: linear-gradient(90deg, rgba(200, 0, 0, 0.5), rgba(200, 0, 0, 0) 70%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%);
+    mask-image: linear-gradient(to right, transparent 0%, black 40%);
     animation: shineBorder 2s infinite linear;
     pointer-events: none;
 }

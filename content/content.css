@@ -49,14 +49,6 @@
   background: linear-gradient(135deg, #ffa500 0%, #ff6b6b 100%);
 }
 
-.repakx-button.waiting {
-  background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
-}
-
-.repakx-button.success {
-  background: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
-}
-
 .repakx-button.error {
   background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
 }
@@ -66,16 +58,18 @@
 }
 
 .repakx-icon.spin {
-  animation: repakx-spin 1s linear infinite;
+  animation: repakx-pulse 1s ease-in-out infinite;
 }
 
-@keyframes repakx-spin {
-  from {
-    transform: rotate(0deg);
+@keyframes repakx-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
   }
 
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
   }
 }
 

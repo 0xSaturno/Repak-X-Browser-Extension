@@ -6,7 +6,7 @@
     "author": "Saturn",
     "browser_specific_settings": {
         "gecko": {
-            "id": "repakx@saturn.com",
+            "id": "repakx@extension",
             "strict_min_version": "109.0"
         }
     },
@@ -37,8 +37,7 @@
     "content_scripts": [
         {
             "matches": [
-                "https://www.nexusmods.com/marvelrivals/*",
-                "https://nexusmods.com/marvelrivals/*"
+                "https://www.nexusmods.com/marvelrivals/*"
             ],
             "js": [
                 "content/content.js"
@@ -60,6 +59,7 @@
         {
             "resources": [
                 "icons/*",
+                "fonts/*",
                 "redirect.html"
             ],
             "matches": [
