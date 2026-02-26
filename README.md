@@ -22,8 +22,8 @@
 | Feature                     | Description                                                          |
 | --------------------------- | -------------------------------------------------------------------- |
 | 🎮 **Marvel Rivals Support** | Automatically activates on Nexus Mods Marvel Rivals pages            |
-| ⚡ **One-Click Install**     | Click "To Repak X" to download and send directly to your mod manager |
-| 🔄 **Auto-Download**         | Automatically handles the "Slow Download" button for free users      |
+| ⚡ **One-Click Install**     | Click "Repak X" logo button to download and send directly to your mod manager |
+| 🔄 **Auto-Download**         | Automatically handles downloads for free and premium users      |
 | 🌐 **Cross-Browser**         | Works on Chrome, Edge, and Firefox                                   |
 | 🎨 **Native UI**             | Button seamlessly integrates with Nexus Mods design                  |
 
@@ -66,40 +66,8 @@
 
 ## ⚙️ Requirements
 
-- **Repak X** desktop application installed with `repakx://` protocol handler registered
+- **[Repak X](https://github.com/XzantGaming/Repak-X)** desktop application installed with `repakx://` protocol handler registered
 - Chrome 88+, Edge 88+, or Firefox 109+
-
----
-
-## 🛠️ Building from Source
-
-### Prerequisites
-- PowerShell 5.1+
-- Chrome (for .crx generation)
-
-### Build Commands
-
-```powershell
-# Build both Chrome and Firefox packages
-.\build.ps1
-
-# Build Chrome only
-.\build.ps1 -Target chrome
-
-# Build Firefox only
-.\build.ps1 -Target firefox
-```
-
-### Output Files
-
-After building, you'll find in the `dist/` folder:
-
-| File                  | Description                       |
-| --------------------- | --------------------------------- |
-| `Repak-X-Chrome.crx`  | Chrome/Edge installable extension |
-| `Repak-X-Chrome.zip`  | For Chrome Web Store submission   |
-| `Repak-X-Firefox.xpi` | Firefox installable extension     |
-| `Repak-X.pem`         | Private signing key (keep safe!)  |
 
 ---
 
@@ -121,7 +89,6 @@ Repak-X-extension/
 ├── manifest.json           # Firefox manifest
 ├── manifest.chrome.json    # Chrome/Edge manifest
 ├── manifest.firefox.json   # Firefox manifest (source)
-├── build.ps1               # Build script
 └── browser-polyfill.js     # Cross-browser API compatibility
 ```
 
