@@ -96,3 +96,11 @@
         transform: translateX(100%);
     }
 }
+
+/* New Nexus Mods UI: vertical alignment fix */
+.popup-btn-ajax + .repakx-button.alt,
+.repakx-button.alt[data-for-popup="true"] {
+    vertical-align: middle;
+    margin-top: 10px;
+    margin-bottom: 0;
+}

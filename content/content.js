@@ -205,10 +205,58 @@
     function injectButtons() {
         console.log('[Repak X] Scanning for download buttons...');
 
-        // Target the specific Nexus Mods structure: .flex-label containing "Manual download"
-        const flexLabels = document.querySelectorAll('.flex-label');
         let foundCount = 0;
 
+        // Target the new Nexus Mods UI: .popup-btn-ajax containing "Manual download"
+        const popupButtons = document.querySelectorAll('.popup-btn-ajax');
+        popupButtons.forEach(downloadBtn => {
+            const text = (downloadBtn.textContent || '').toLowerCase().trim();
+
+            // Only target Manual download buttons
+            if (!text.includes('manual')) return;
+
+            // Skip if already processed
+            if (downloadBtn.hasAttribute(PROCESSED_ATTR)) return;
+            downloadBtn.setAttribute(PROCESSED_ATTR, 'true');
+
+            foundCount++;
+            console.log('[Repak X] Found Manual download button (new UI):', downloadBtn.href || downloadBtn.className);
+
+            // Try to find file name from context
+            let fileName = 'mod';
+            const container = downloadBtn.closest('.accordion, .file, section, [class*="file"], li, div, tr');
+            if (container) {
+                const nameEl = container.querySelector('h3, h4, strong, .name, dt, [class*="title"]');
+                if (nameEl) {
+                    fileName = nameEl.textContent.trim();
+                }
+            }
+
+            // Fallback: try to get mod name from page
+            if (fileName === 'mod') {
+                const pageTitle = document.querySelector('h1');
+                if (pageTitle) {
+                    fileName = pageTitle.textContent.trim();
+                }
+            }
+
+            // Create and inject our button
+            const repakButton = createRepakXButton(downloadBtn, fileName);
+
+            // For new UI: insert after the parent container so button appears horizontally
+            // For old UI: insert after the download button itself
+            if (downloadBtn.classList.contains('popup-btn-ajax') && downloadBtn.parentNode && downloadBtn.parentNode.parentNode) {
+                repakButton.setAttribute('data-for-popup', 'true');
+                downloadBtn.parentNode.parentNode.insertBefore(repakButton, downloadBtn.parentNode.nextSibling);
+                console.log('[Repak X] ✓ Injected button after parent for:', fileName);
+            } else if (downloadBtn.parentNode) {
+                downloadBtn.parentNode.insertBefore(repakButton, downloadBtn.nextSibling);
+                console.log('[Repak X] ✓ Injected button for:', fileName);
+            }
+        });
+
+        // Target the old Nexus Mods structure: .flex-label containing "Manual download"
+        const flexLabels = document.querySelectorAll('.flex-label');
         flexLabels.forEach(label => {
             const text = (label.textContent || '').toLowerCase().trim();
 
@@ -224,7 +272,7 @@
             downloadBtn.setAttribute(PROCESSED_ATTR, 'true');
 
             foundCount++;
-            console.log('[Repak X] Found Manual download button:', downloadBtn.href || downloadBtn.className);
+            console.log('[Repak X] Found Manual download button (old UI):', downloadBtn.href || downloadBtn.className);
 
             // Try to find file name from context
             let fileName = 'mod';
