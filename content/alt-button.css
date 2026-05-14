@@ -97,10 +97,9 @@
     }
 }
 
-/* New Nexus Mods UI: vertical alignment fix */
-.popup-btn-ajax + .repakx-button.alt,
-.repakx-button.alt[data-for-popup="true"] {
-    vertical-align: middle;
-    margin-top: 10px;
-    margin-bottom: 0;
+/* Force the parent li to lay out horizontally in Chrome */
+li:has(> .repakx-button.alt[data-for-popup="true"]) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }

@@ -243,14 +243,17 @@
             // Create and inject our button
             const repakButton = createRepakXButton(downloadBtn, fileName);
 
-            // For new UI: insert after the parent container so button appears horizontally
-            // For old UI: insert after the download button itself
-            if (downloadBtn.classList.contains('popup-btn-ajax') && downloadBtn.parentNode && downloadBtn.parentNode.parentNode) {
+            // Insert directly after the download button (same parent) to stay inline with it
+            if (downloadBtn.parentNode) {
                 repakButton.setAttribute('data-for-popup', 'true');
-                downloadBtn.parentNode.parentNode.insertBefore(repakButton, downloadBtn.parentNode.nextSibling);
-                console.log('[Repak X] ✓ Injected button after parent for:', fileName);
-            } else if (downloadBtn.parentNode) {
                 downloadBtn.parentNode.insertBefore(repakButton, downloadBtn.nextSibling);
+                // Force the parent li to lay out horizontally (Chrome stacks list-item children as block by default)
+                const parentLi = repakButton.closest('li');
+                if (parentLi) {
+                    parentLi.style.display = 'flex';
+                    parentLi.style.alignItems = 'center';
+                    parentLi.style.flexWrap = 'wrap';
+                }
                 console.log('[Repak X] ✓ Injected button for:', fileName);
             }
         });
@@ -297,7 +300,14 @@
 
             // Insert after the download button
             if (downloadBtn.parentNode) {
+                repakButton.setAttribute('data-for-popup', 'true');
                 downloadBtn.parentNode.insertBefore(repakButton, downloadBtn.nextSibling);
+                const parentLi = repakButton.closest('li');
+                if (parentLi) {
+                    parentLi.style.display = 'flex';
+                    parentLi.style.alignItems = 'center';
+                    parentLi.style.flexWrap = 'wrap';
+                }
                 console.log('[Repak X] ✓ Injected button for:', fileName);
             }
         });
@@ -315,7 +325,14 @@
 
             const repakButton = createRepakXButton(link, fileName);
             if (link.parentNode) {
+                repakButton.setAttribute('data-for-popup', 'true');
                 link.parentNode.insertBefore(repakButton, link.nextSibling);
+                const parentLi = repakButton.closest('li');
+                if (parentLi) {
+                    parentLi.style.display = 'flex';
+                    parentLi.style.alignItems = 'center';
+                    parentLi.style.flexWrap = 'wrap';
+                }
                 foundCount++;
             }
         });

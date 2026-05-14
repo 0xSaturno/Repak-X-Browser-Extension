@@ -99,14 +99,3 @@
 .btn-group .repakx-button {
   margin-left: 4px;
 }
-
-/* New Nexus Mods UI: position inline next to popup-btn-ajax */
-.popup-btn-ajax + .repakx-button,
-.repakx-button[data-for-popup="true"] {
-  display: inline-flex;
-  margin-left: 8px;
-  margin-top: 0;
-  margin-bottom: 0;
-  vertical-align: middle;
-  align-self: center;
-}
