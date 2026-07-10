@@ -34,7 +34,7 @@
      * Recursively find all buttons including inside Shadow DOMs
      */
     function getAllButtons(root = document) {
-        let buttons = [...root.querySelectorAll('button')];
+        let buttons = [...root.querySelectorAll('button, a')];
 
         // Also search inside shadow roots
         const allElements = root.querySelectorAll('*');
@@ -207,32 +207,27 @@
 
         let foundCount = 0;
 
-        // Target the new Nexus Mods UI: .popup-btn-ajax containing "Manual download"
-        const popupButtons = document.querySelectorAll('.popup-btn-ajax');
-        popupButtons.forEach(downloadBtn => {
-            const text = (downloadBtn.textContent || '').toLowerCase().trim();
-
-            // Only target Manual download buttons
-            if (!text.includes('manual')) return;
-
-            // Skip if already processed
-            if (downloadBtn.hasAttribute(PROCESSED_ATTR)) return;
-            downloadBtn.setAttribute(PROCESSED_ATTR, 'true');
+        // Target the NEWEST Nexus Mods UI (mod-download-modal)
+        const downloadModals = document.querySelectorAll('mod-download-modal');
+        downloadModals.forEach(modal => {
+            if (modal.hasAttribute(PROCESSED_ATTR)) return;
+            modal.setAttribute(PROCESSED_ATTR, 'true');
 
             foundCount++;
-            console.log('[Repak X] Found Manual download button (new UI):', downloadBtn.href || downloadBtn.className);
+            console.log('[Repak X] Found mod-download-modal (newest UI)');
 
-            // Try to find file name from context
+            // Try to find file name from attribute
             let fileName = 'mod';
-            const container = downloadBtn.closest('.accordion, .file, section, [class*="file"], li, div, tr');
-            if (container) {
-                const nameEl = container.querySelector('h3, h4, strong, .name, dt, [class*="title"]');
-                if (nameEl) {
-                    fileName = nameEl.textContent.trim();
+            try {
+                const fileData = JSON.parse(modal.getAttribute('file'));
+                if (fileData && fileData.name) {
+                    fileName = fileData.name;
                 }
+            } catch (e) {
+                console.error('[Repak X] Error parsing mod-download-modal file attribute', e);
             }
 
-            // Fallback: try to get mod name from page
+            // Fallback for file name
             if (fileName === 'mod') {
                 const pageTitle = document.querySelector('h1');
                 if (pageTitle) {
@@ -240,73 +235,30 @@
                 }
             }
 
-            // Create and inject our button
-            const repakButton = createRepakXButton(downloadBtn, fileName);
+            // Attempt to find the manual download button inside the modal
+            let manualBtn = modal; // Fallback to clicking the modal element itself
+            const allInnerButtons = getAllButtons(modal);
+            const foundManual = allInnerButtons.find(b => {
+                const text = (b.textContent || '').toLowerCase().trim();
+                return text.includes('manual');
+            });
+            
+            if (foundManual) {
+                manualBtn = foundManual;
+            }
 
-            // Insert directly after the download button (same parent) to stay inline with it
-            if (downloadBtn.parentNode) {
+            // Create and inject our button
+            const repakButton = createRepakXButton(manualBtn, fileName);
+
+            if (modal.parentNode) {
                 repakButton.setAttribute('data-for-popup', 'true');
-                downloadBtn.parentNode.insertBefore(repakButton, downloadBtn.nextSibling);
-                // Force the parent li to lay out horizontally (Chrome stacks list-item children as block by default)
+                modal.parentNode.insertBefore(repakButton, modal.nextSibling);
                 const parentLi = repakButton.closest('li');
                 if (parentLi) {
                     parentLi.style.display = 'flex';
                     parentLi.style.alignItems = 'center';
                     parentLi.style.flexWrap = 'wrap';
-                }
-                console.log('[Repak X] ✓ Injected button for:', fileName);
-            }
-        });
-
-        // Target the old Nexus Mods structure: .flex-label containing "Manual download"
-        const flexLabels = document.querySelectorAll('.flex-label');
-        flexLabels.forEach(label => {
-            const text = (label.textContent || '').toLowerCase().trim();
-
-            // Only target Manual download buttons
-            if (!text.includes('manual')) return;
-
-            // Find the parent button/link
-            const downloadBtn = label.closest('a, button');
-            if (!downloadBtn) return;
-
-            // Skip if already processed
-            if (downloadBtn.hasAttribute(PROCESSED_ATTR)) return;
-            downloadBtn.setAttribute(PROCESSED_ATTR, 'true');
-
-            foundCount++;
-            console.log('[Repak X] Found Manual download button (old UI):', downloadBtn.href || downloadBtn.className);
-
-            // Try to find file name from context
-            let fileName = 'mod';
-            const container = downloadBtn.closest('.accordion, .file, section, [class*="file"], li, div');
-            if (container) {
-                const nameEl = container.querySelector('h3, h4, strong, .name, dt, [class*="title"]:not(.flex-label)');
-                if (nameEl && !nameEl.classList.contains('flex-label')) {
-                    fileName = nameEl.textContent.trim();
-                }
-            }
-
-            // Fallback: try to get mod name from page
-            if (fileName === 'mod') {
-                const pageTitle = document.querySelector('h1');
-                if (pageTitle) {
-                    fileName = pageTitle.textContent.trim();
-                }
-            }
-
-            // Create and inject our button
-            const repakButton = createRepakXButton(downloadBtn, fileName);
-
-            // Insert after the download button
-            if (downloadBtn.parentNode) {
-                repakButton.setAttribute('data-for-popup', 'true');
-                downloadBtn.parentNode.insertBefore(repakButton, downloadBtn.nextSibling);
-                const parentLi = repakButton.closest('li');
-                if (parentLi) {
-                    parentLi.style.display = 'flex';
-                    parentLi.style.alignItems = 'center';
-                    parentLi.style.flexWrap = 'wrap';
+                    // Gap removed so it matches the other buttons' margin-left spacing
                 }
                 console.log('[Repak X] ✓ Injected button for:', fileName);
             }

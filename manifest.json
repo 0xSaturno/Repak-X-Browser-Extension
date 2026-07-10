@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Repak X - Nexus Mods Integration",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Adds a 'To Repak X' button on Nexus Mods Marvel Rivals mod pages to quickly send mods to Repak X",
     "author": "Saturn",
     "browser_specific_settings": {
@@ -9,7 +9,9 @@
             "id": "repakx@extension",
             "strict_min_version": "140.0",
             "data_collection_permissions": {
-                "required": ["none"]
+                "required": [
+                    "none"
+                ]
             }
         }
     },
