@@ -36,7 +36,12 @@
     function getAllButtons(root = document) {
         let buttons = [...root.querySelectorAll('button, a')];
 
-        // Also search inside shadow roots
+        // Also search inside the root's own shadow root
+        if (root.shadowRoot) {
+            buttons = buttons.concat(getAllButtons(root.shadowRoot));
+        }
+
+        // Also search inside shadow roots of descendants
         const allElements = root.querySelectorAll('*');
         for (const el of allElements) {
             if (el.shadowRoot) {
