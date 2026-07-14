@@ -9,23 +9,22 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/version-1.0.3-blue" alt="Version">
   <img src="https://img.shields.io/badge/chrome-supported-green" alt="Chrome">
   <img src="https://img.shields.io/badge/firefox-supported-orange" alt="Firefox">
-  <img src="https://img.shields.io/badge/edge-supported-blue" alt="Edge">
 </p>
 
 ---
 
 ## ✨ Features
 
-| Feature                     | Description                                                          |
-| --------------------------- | -------------------------------------------------------------------- |
-| 🎮 **Marvel Rivals Support** | Automatically activates on Nexus Mods Marvel Rivals pages            |
+| Feature                     | Description                                                                       |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| 🎮 **Marvel Rivals Support** | Automatically activates on Nexus Mods Marvel Rivals pages                         |
 | ⚡ **One-Click Install**     | Click the "Repak X" button to download and send mods directly to your mod manager |
-| 🔄 **Auto-Download**         | Automatically handles the "Slow Download" button for free users      |
-| 🌐 **Cross-Browser**         | Works on Chrome, Edge, and Firefox                                   |
-| 🎨 **Native UI**             | Button seamlessly integrates with Nexus Mods                  |
+| 🔄 **Auto-Download**         | Automatically handles the "Slow Download" button for free users                   |
+| 🌐 **Cross-Browser**         | Works on Chrome, Edge, and Firefox                                                |
+| 🎨 **Native UI**             | Button seamlessly integrates with Nexus Mods                                      |
 
 ---
 
@@ -33,10 +32,10 @@
 
 <p align="center">
 
-| Platform | Download |
-|----------|----------|
+| Platform          | Download                                                                                                                                                                                                                                           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Chrome / Edge** | [![Chrome Web Store](https://img.shields.io/badge/Chrome%20Web%20Store-Install-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/repak-x-nexus-mods-integr/nojdpedipmgiihjpnjhcpfnapaekcjpj) |
-| **Firefox** | [![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add--ons-Install-FF7139?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/repak-x-nexus-mods-integration/) |
+| **Firefox**       | [![Firefox Add-ons](https://img.shields.io/badge/Firefox%20Add--ons-Install-FF7139?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/repak-x-nexus-mods-integration/)                              |
 
 </p>
 
